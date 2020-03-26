@@ -51,8 +51,11 @@ gyy = @(x,y) 0
 gradiente = @(x,y) [gx(x,y);gy(x,y)]
 hessiano = @(x,y) [gxx(x,y) gxy(x,y); gyx(x,y); gyy(x,y)]
 
-#la formula de T1 es 
-T1 = @(x,y) h(x,y) - gradiente(x,y)'*[x;y]
+#la formula de T1 es
+x0 = 0
+y0 = 0
+
+T1 = @(x,y) h(x0,y0) + gx(x0,y0) * (x-x0) + gy(x0,y0) * (y-y0)
 
 
 [X,Y] = meshgrid(-5:0.25:5);
@@ -60,3 +63,7 @@ surf(X,Y,h(X,Y))
 hold on
 surf(X,Y,T1(X,Y))
 
+T2 = @(x,y) h(x0,y0) + gx(x0,y0) * (x-x0) + gy(x0,y0) * (y-y0) + (x-x0)*gxx(x0,y0)*(x-x0)
+surf(X,Y,h(X,Y))
+hold on
+surf(X,Y,T2(X,Y))
