@@ -1,0 +1,313 @@
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\geometry{margin=2.5cm}
+\setlist[itemize]{noitemsep,topsep=2pt}
+\setlist[enumerate]{noitemsep,topsep=2pt}
+
+\title{Guía rápida para instalar Visual Studio Code y Python}
+\author{Grado en \dots}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Objetivo}
+Al final de esta guía el alumnado deberá ser capaz de:
+\begin{itemize}
+  \item Tener instalado Visual Studio Code (VS~Code).
+  \item Tener instalado Python 3 y \texttt{pip}.
+  \item Usar Python y \texttt{pip} desde la terminal integrada de VS~Code.
+\end{itemize}
+
+Las instrucciones están pensadas para las versiones actuales de Windows, macOS y Linux, con especial énfasis en Windows.
+
+\section*{1. Instalar Visual Studio Code}
+
+\subsection*{1.1. Windows (recomendado)}
+\begin{enumerate}
+  \item Abrir el navegador y entrar en: \href{https://code.visualstudio.com}{https://code.visualstudio.com}.
+  \item Pulsar en \textbf{Download for Windows} y descargar el instalador.
+  \item Ejecutar el instalador (\texttt{VSCodeSetup\_x64.exe}) y aceptar la licencia.
+  \item Opcional pero recomendable: marcar las casillas que integran VS~Code en el menú contextual (\emph{``Open with Code''}).
+  \item Finalizar el asistente dejando la opción de actualizaciones automáticas activada.
+\end{enumerate}
+
+\subsection*{1.2. macOS}
+\begin{enumerate}
+  \item Ir a \href{https://code.visualstudio.com}{https://code.visualstudio.com} y descargar la versión para macOS.
+  \item Abrir el fichero \texttt{.zip} descargado y arrastrar \texttt{Visual Studio Code.app} a \texttt{/Applications}.
+  \item (Opcional) Desde VS~Code, abrir la Paleta de Comandos (\texttt{Cmd+Shift+P}), escribir \texttt{shell command} y elegir \emph{``Install 'code' command in PATH''} para poder lanzar VS~Code desde la terminal con \texttt{code}.
+\end{enumerate}
+
+\subsection*{1.3. Linux (Ubuntu/Debian como ejemplo)}
+\begin{itemize}
+  \item Opción sencilla: desde \href{https://code.visualstudio.com}{https://code.visualstudio.com} descargar el paquete \texttt{.deb} (para Debian/Ubuntu) o \texttt{.rpm} (para Fedora, etc.) y abrirlo con el gestor de paquetes.
+  \item En Ubuntu/Debian, una vez descargado el \texttt{.deb}:
+  \begin{enumerate}
+    \item Abrir una terminal.
+    \item Ejecutar:
+\begin{verbatim}
+sudo apt install ./code_*_amd64.deb
+\end{verbatim}
+  \end{enumerate}
+\end{itemize}
+
+\section*{2. Instalar Python 3 y pip}
+
+\subsection*{2.1. Windows (muy importante: añadir al PATH)}
+\begin{enumerate}
+  \item Entrar en la web oficial de Python: \href{https://www.python.org/downloads/}{https://www.python.org/downloads/}.
+  \item Pulsar \textbf{Download Python 3.x.x} (la versión estable más reciente).
+  \item Ejecutar el instalador descargado (\texttt{python-3.x.x-amd64.exe}).
+  \item \textbf{Muy importante:} en la primera pantalla marcar la casilla:
+  \begin{center}
+    \textbf{\texttt{Add python.exe to PATH}}
+  \end{center}
+  \item Pulsar \textbf{Customize installation} o \textbf{Install Now} (cualquiera de las dos deja Python en el PATH si se marcó la casilla anterior).
+  \item Dejar marcada la opción de instalar \texttt{pip} (suele venir activada por defecto).
+  \item Finalizar la instalación.
+\end{enumerate}
+
+\paragraph{Comprobación en VS~Code (Windows).}
+\begin{enumerate}
+  \item Abrir VS~Code.
+  \item Menú \textbf{Terminal} $\rightarrow$ \textbf{New Terminal}.
+  \item En la terminal que aparece abajo, escribir:
+\begin{verbatim}
+python --version
+pip --version
+\end{verbatim}
+  \item Si todo está correcto, deberán aparecer la versión de Python y de \texttt{pip}. 
+  \item Si \texttt{python} no se reconoce, probar:
+\begin{verbatim}
+py -3 --version
+\end{verbatim}
+  \item Si tampoco funciona, repetir la instalación de Python asegurándose de marcar \emph{``Add python.exe to PATH''}.
+\end{enumerate}
+
+\subsection*{2.2. macOS}
+\begin{enumerate}
+  \item Ir a \href{https://www.python.org/downloads/}{https://www.python.org/downloads/} y descargar el instalador para macOS (\texttt{.pkg}).
+  \item Ejecutar el \texttt{.pkg} y seguir los pasos del asistente.
+  \item Abrir la aplicación \texttt{Terminal} y comprobar:
+\begin{verbatim}
+python3 --version
+pip3 --version
+\end{verbatim}
+  \item En VS~Code, abrir una terminal (\texttt{Terminal $\rightarrow$ New Terminal}) y usar \texttt{python3} y \texttt{pip3} en lugar de \texttt{python} y \texttt{pip} si es necesario.
+\end{enumerate}
+
+\subsection*{2.3. Linux (Ubuntu/Debian)}
+En muchas distribuciones Python 3 ya viene instalado. Para asegurarlo (y añadir \texttt{pip}):
+\begin{verbatim}
+sudo apt update
+sudo apt install python3 python3-pip
+\end{verbatim}
+Después, en VS~Code, en la terminal integrada:
+\begin{verbatim}
+python3 --version
+pip3 --version
+\end{verbatim}
+
+\section*{3. Configurar el soporte de Python en VS~Code}
+
+\subsection*{3.1. Extensión de Python}
+\begin{enumerate}
+  \item Abrir VS~Code.
+  \item En la barra lateral izquierda, pulsar en el icono de extensiones (cuadro con cuatro bloques) o usar \texttt{Ctrl+Shift+X}.
+  \item Buscar \texttt{Python}.
+  \item Instalar la extensión oficial de Microsoft (\emph{Python} --- publisher \emph{Microsoft}).
+\end{enumerate}
+
+\subsection*{3.2. Seleccionar el intérprete de Python}
+\begin{enumerate}
+  \item Abrir la Paleta de Comandos: \texttt{Ctrl+Shift+P} (Windows/Linux) o \texttt{Cmd+Shift+P} (macOS).
+  \item Escribir \texttt{Python: Select Interpreter}.
+  \item Elegir el Python instalado (normalmente aparecerá como \texttt{Python 3.x.x} en una ruta estándar).
+\end{enumerate}
+
+\section*{4. Primera prueba: ``Hola, mundo''}
+
+\begin{enumerate}
+  \item En VS~Code, crear una carpeta para la asignatura y abrirla (\textbf{File $\rightarrow$ Open Folder}).
+  \item Crear un archivo nuevo llamado \texttt{hola.py}.
+  \item Escribir:
+\begin{verbatim}
+print("Hola, mundo")
+\end{verbatim}
+  \item Guardar el archivo.
+  \item Abrir la terminal integrada (\textbf{Terminal $\rightarrow$ New Terminal}) y ejecutar:
+\begin{verbatim}
+python hola.py
+\end{verbatim}
+  (o \texttt{python3 hola.py} en macOS/Linux).
+  \item Debería aparecer el mensaje \texttt{Hola, mundo} en la terminal. Si es así, el entorno está listo.
+\end{enumerate}
+
+\vfill
+\noindent\textbf{Nota:} es recomendable que el alumnado traiga estas herramientas ya instaladas a la primera sesión de prácticas.
+
+\end{document}
+\documentclass[a4paper,11pt]{article}
+
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{hyperref}
+\usepackage{geometry}
+\usepackage{enumitem}
+\geometry{margin=2.5cm}
+\setlist[itemize]{noitemsep,topsep=2pt}
+\setlist[enumerate]{noitemsep,topsep=2pt}
+
+\title{Guía rápida para instalar Visual Studio Code y Python}
+\author{Grado en \dots}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Objetivo}
+Al final de esta guía el alumnado deberá ser capaz de:
+\begin{itemize}
+  \item Tener instalado Visual Studio Code (VS~Code).
+  \item Tener instalado Python 3 y \texttt{pip}.
+  \item Usar Python y \texttt{pip} desde la terminal integrada de VS~Code.
+\end{itemize}
+
+Las instrucciones están pensadas para las versiones actuales de Windows, macOS y Linux, con especial énfasis en Windows.
+
+\section*{1. Instalar Visual Studio Code}
+
+\subsection*{1.1. Windows (recomendado)}
+\begin{enumerate}
+  \item Abrir el navegador y entrar en: \href{https://code.visualstudio.com}{https://code.visualstudio.com}.
+  \item Pulsar en \textbf{Download for Windows} y descargar el instalador.
+  \item Ejecutar el instalador (\texttt{VSCodeSetup\_x64.exe}) y aceptar la licencia.
+  \item Opcional pero recomendable: marcar las casillas que integran VS~Code en el menú contextual (\emph{``Open with Code''}).
+  \item Finalizar el asistente dejando la opción de actualizaciones automáticas activada.
+\end{enumerate}
+
+\subsection*{1.2. macOS}
+\begin{enumerate}
+  \item Ir a \href{https://code.visualstudio.com}{https://code.visualstudio.com} y descargar la versión para macOS.
+  \item Abrir el fichero \texttt{.zip} descargado y arrastrar \texttt{Visual Studio Code.app} a \texttt{/Applications}.
+  \item (Opcional) Desde VS~Code, abrir la Paleta de Comandos (\texttt{Cmd+Shift+P}), escribir \texttt{shell command} y elegir \emph{``Install 'code' command in PATH''} para poder lanzar VS~Code desde la terminal con \texttt{code}.
+\end{enumerate}
+
+\subsection*{1.3. Linux (Ubuntu/Debian como ejemplo)}
+\begin{itemize}
+  \item Opción sencilla: desde \href{https://code.visualstudio.com}{https://code.visualstudio.com} descargar el paquete \texttt{.deb} (para Debian/Ubuntu) o \texttt{.rpm} (para Fedora, etc.) y abrirlo con el gestor de paquetes.
+  \item En Ubuntu/Debian, una vez descargado el \texttt{.deb}:
+  \begin{enumerate}
+    \item Abrir una terminal.
+    \item Ejecutar:
+\begin{verbatim}
+sudo apt install ./code_*_amd64.deb
+\end{verbatim}
+  \end{enumerate}
+\end{itemize}
+
+\section*{2. Instalar Python 3 y pip}
+
+\subsection*{2.1. Windows (muy importante: añadir al PATH)}
+\begin{enumerate}
+  \item Entrar en la web oficial de Python: \href{https://www.python.org/downloads/}{https://www.python.org/downloads/}.
+  \item Pulsar \textbf{Download Python 3.x.x} (la versión estable más reciente).
+  \item Ejecutar el instalador descargado (\texttt{python-3.x.x-amd64.exe}).
+  \item \textbf{Muy importante:} en la primera pantalla marcar la casilla:
+  \begin{center}
+    \textbf{\texttt{Add python.exe to PATH}}
+  \end{center}
+  \item Pulsar \textbf{Customize installation} o \textbf{Install Now} (cualquiera de las dos deja Python en el PATH si se marcó la casilla anterior).
+  \item Dejar marcada la opción de instalar \texttt{pip} (suele venir activada por defecto).
+  \item Finalizar la instalación.
+\end{enumerate}
+
+\paragraph{Comprobación en VS~Code (Windows).}
+\begin{enumerate}
+  \item Abrir VS~Code.
+  \item Menú \textbf{Terminal} $\rightarrow$ \textbf{New Terminal}.
+  \item En la terminal que aparece abajo, escribir:
+\begin{verbatim}
+python --version
+pip --version
+\end{verbatim}
+  \item Si todo está correcto, deberán aparecer la versión de Python y de \texttt{pip}. 
+  \item Si \texttt{python} no se reconoce, probar:
+\begin{verbatim}
+py -3 --version
+\end{verbatim}
+  \item Si tampoco funciona, repetir la instalación de Python asegurándose de marcar \emph{``Add python.exe to PATH''}.
+\end{enumerate}
+
+\subsection*{2.2. macOS}
+\begin{enumerate}
+  \item Ir a \href{https://www.python.org/downloads/}{https://www.python.org/downloads/} y descargar el instalador para macOS (\texttt{.pkg}).
+  \item Ejecutar el \texttt{.pkg} y seguir los pasos del asistente.
+  \item Abrir la aplicación \texttt{Terminal} y comprobar:
+\begin{verbatim}
+python3 --version
+pip3 --version
+\end{verbatim}
+  \item En VS~Code, abrir una terminal (\texttt{Terminal $\rightarrow$ New Terminal}) y usar \texttt{python3} y \texttt{pip3} en lugar de \texttt{python} y \texttt{pip} si es necesario.
+\end{enumerate}
+
+\subsection*{2.3. Linux (Ubuntu/Debian)}
+En muchas distribuciones Python 3 ya viene instalado. Para asegurarlo (y añadir \texttt{pip}):
+\begin{verbatim}
+sudo apt update
+sudo apt install python3 python3-pip
+\end{verbatim}
+Después, en VS~Code, en la terminal integrada:
+\begin{verbatim}
+python3 --version
+pip3 --version
+\end{verbatim}
+
+\section*{3. Configurar el soporte de Python en VS~Code}
+
+\subsection*{3.1. Extensión de Python}
+\begin{enumerate}
+  \item Abrir VS~Code.
+  \item En la barra lateral izquierda, pulsar en el icono de extensiones (cuadro con cuatro bloques) o usar \texttt{Ctrl+Shift+X}.
+  \item Buscar \texttt{Python}.
+  \item Instalar la extensión oficial de Microsoft (\emph{Python} --- publisher \emph{Microsoft}).
+\end{enumerate}
+
+\subsection*{3.2. Seleccionar el intérprete de Python}
+\begin{enumerate}
+  \item Abrir la Paleta de Comandos: \texttt{Ctrl+Shift+P} (Windows/Linux) o \texttt{Cmd+Shift+P} (macOS).
+  \item Escribir \texttt{Python: Select Interpreter}.
+  \item Elegir el Python instalado (normalmente aparecerá como \texttt{Python 3.x.x} en una ruta estándar).
+\end{enumerate}
+
+\section*{4. Primera prueba: ``Hola, mundo''}
+
+\begin{enumerate}
+  \item En VS~Code, crear una carpeta para la asignatura y abrirla (\textbf{File $\rightarrow$ Open Folder}).
+  \item Crear un archivo nuevo llamado \texttt{hola.py}.
+  \item Escribir:
+\begin{verbatim}
+print("Hola, mundo")
+\end{verbatim}
+  \item Guardar el archivo.
+  \item Abrir la terminal integrada (\textbf{Terminal $\rightarrow$ New Terminal}) y ejecutar:
+\begin{verbatim}
+python hola.py
+\end{verbatim}
+  (o \texttt{python3 hola.py} en macOS/Linux).
+  \item Debería aparecer el mensaje \texttt{Hola, mundo} en la terminal. Si es así, el entorno está listo.
+\end{enumerate}
+
+\vfill
+\noindent\textbf{Nota:} es recomendable que el alumnado traiga estas herramientas ya instaladas a la primera sesión de prácticas.
+
+\end{document}
+
