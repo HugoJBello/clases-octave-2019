@@ -1,0 +1,501 @@
+\documentclass[a4paper,spanish,12pt]{article}
+\usepackage{graphicx,amscd,color,amsmath,amsfonts,amssymb,amsthm}
+\usepackage{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+
+%%% retoques a dimensiones
+\setlength{\topmargin}{-1cm}
+\addtolength{\evensidemargin}{-2cm}
+\addtolength{\oddsidemargin}{-2cm}
+\addtolength{\textwidth}{3.5cm}
+
+%%%%%% conjuntos de numeros %%%%%%%%
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\ds}{{\displaystyle}}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% primera convocatoria %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{empty}
+
+\centerline{\huge\scshape Laboratorio 1: Introducción a Python, NumPy y Matplotlib}
+\vspace{25pt}
+
+A lo largo de estas sesiones de prácticas vamos a aprender a usar el lenguaje de programación Python junto con las librerías NumPy y Matplotlib. Python es un lenguaje muy utilizado en ingeniería y ciencia de datos, que va más allá de lo que puede hacer una calculadora, y nos permitirá realizar no sólo la mayor parte de los cálculos que estáis viendo en clase, sino que os dará mucha libertad para diseñar vuestros propios métodos y algoritmos para resolver los cálculos matemáticos que os encontraréis a lo largo de la carrera. Usaremos Python (junto con NumPy y Matplotlib) para:
+\begin{itemize}
+  \item realizar operaciones aritméticas,
+  \item programar en un lenguaje interpretado,
+  \item trabajar con vectores y matrices de forma eficiente,
+  \item realizar gran variedad de gráficos,
+  \item ...
+\end{itemize}
+
+\centerline{\sc Introducción a NumPy y Matplotlib}
+\vspace{10pt}
+
+Python se amplía mediante \emph{librerías} (también llamadas \emph{módulos} o \emph{paquetes}). Una librería es un conjunto de funciones y herramientas ya programadas que podemos reutilizar en nuestros propios programas. En este laboratorio utilizaremos principalmente dos:
+
+\begin{itemize}
+  \item \textbf{NumPy}: proporciona tipos de datos para vectores y matrices (arrays) y muchas funciones matemáticas optimizadas. Es la base del cálculo científico en Python.
+  \item \textbf{Matplotlib}: permite crear gráficos de muchos tipos (curvas, nubes de puntos, barras, etc.) de forma similar a como se hace en programas científicos.
+\end{itemize}
+
+Supondremos que Python ya está instalado en el ordenador. Para instalar las librerías usaremos el gestor de paquetes \verb|pip| desde la línea de comandos (terminal, PowerShell, etc.). Los siguientes comandos instalan NumPy y Matplotlib de forma global (sin usar entornos virtuales):
+
+\begin{itemize}
+  \item En muchos sistemas (Windows, macOS, Linux):
+\begin{verbatim}
+pip install numpy matplotlib
+\end{verbatim}
+  \item Si el comando anterior no funciona, se puede probar:
+\begin{verbatim}
+python -m pip install numpy matplotlib
+\end{verbatim}
+  o, en algunas instalaciones de Windows:
+\begin{verbatim}
+py -m pip install numpy matplotlib
+\end{verbatim}
+\end{itemize}
+
+Una vez instaladas, para usarlas en un programa de Python las importaremos al comienzo del archivo:
+\begin{verbatim}
+import numpy as np
+import matplotlib.pyplot as plt
+\end{verbatim}
+Aquí usamos los alias \verb|np| y \verb|plt| por comodidad (son los más habituales en la documentación). A partir de ahora supondremos que en todos los ejemplos del laboratorio se han hecho estas instrucciones de importación.
+
+Las operaciones se pueden realizar directamente en la línea de comandos de Python (el intérprete interactivo, donde aparecen los símbolos \verb|>>>|) o bien escribiendo un programa en un archivo de texto con extensión \verb|.py|, guardándolo y ejecutándolo desde la terminal con
+\verb|python nombre_archivo.py|. Si se tiene una idea clara de qué cálculos se van a realizar, es conveniente escribir un programa en un archivo \verb|.py|, guardarlo y luego ejecutarlo. Así, si se ha cometido un fallo o se quiere hacer una mínima modificación, no hace falta empezar todo desde el principio.
+
+Cuando se realizan las distintas operaciones, además, se podrán almacenar los resultados en variables: así, si queremos guardar el valor resultante de multiplicar dos números, en lugar de introducir \verb|8*5| sin más, lo podemos guardar bajo \verb|q = 8*5| y, siempre que no modifiquemos este valor de \verb|q|, podremos hacer uso de él mediante una simple llamada, como si fuese una constante más.
+
+{\bf Ejemplo. }Introducir en Python (en el intérprete interactivo o en un programa) las siguientes instrucciones:
+\begin{itemize}
+  \item \verb|q = 8*5|
+  \item \verb|q**2|
+\end{itemize}
+
+\centerline{\sc Arrays en Python (NumPy)}
+\vspace{15pt}
+
+En NumPy, el tipo de dato fundamental para trabajar con números es el \emph{array} (\emph{ndarray}). Un array es una colección ordenada de números que puede representar:
+\begin{itemize}
+  \item un \textbf{vector} (array de una dimensión),
+  \item una \textbf{matriz} (array de dos dimensiones),
+  \item o estructuras de más dimensiones (que en este curso no necesitaremos).
+\end{itemize}
+
+\paragraph{Creación básica de arrays.}
+Para crear arrays sencillos podemos usar \verb|np.array| a partir de listas de Python, o bien funciones de NumPy que generan valores automáticamente.
+\begin{verbatim}
+import numpy as np
+
+# Vector fila con 4 elementos
+v = np.array([1, 2, 3, 4])
+
+# Matriz de 2 filas y 3 columnas
+A = np.array([[1, 2, 3],
+              [4, 5, 6]])
+
+# Vector de 5 ceros
+z = np.zeros(5)
+
+# Matriz 3x3 de unos
+B = np.ones((3, 3))
+\end{verbatim}
+
+\paragraph{Propiedades básicas: forma y tamaño.}
+Cada array tiene una \emph{forma} (\verb|shape|) y un número total de elementos:
+\begin{verbatim}
+A.shape   # (2, 3): 2 filas, 3 columnas
+A.size    # 6 elementos en total
+\end{verbatim}
+
+\paragraph{Indexación (acceder a elementos).}
+En Python los índices empiezan en \textbf{0}. El primer elemento tiene índice \verb|0|, el segundo \verb|1|, etc.
+\begin{verbatim}
+v = np.array([10, 20, 30, 40])
+
+v[0]      # 10 (primer elemento)
+v[2]      # 30 (tercer elemento)
+
+A = np.array([[1, 2, 3],
+              [4, 5, 6]])
+
+A[0, 0]   # 1 (fila 0, columna 0)
+A[1, 2]   # 6 (fila 1, columna 2)
+\end{verbatim}
+
+También podemos acceder a filas o columnas completas:
+\begin{verbatim}
+A[0, :]   # primera fila: [1, 2, 3]
+A[:, 1]   # segunda columna: [2, 5]
+\end{verbatim}
+
+\paragraph{Operaciones básicas con arrays.}
+Si dos arrays tienen la misma forma, las operaciones aritméticas se aplican coordenada a coordenada:
+\begin{verbatim}
+u = np.array([1, 2, 3])
+v = np.array([4, 5, 6])
+
+u + v     # array([5, 7, 9])
+u - v     # array([-3, -3, -3])
+2*u       # array([2, 4, 6])
+u * v     # producto coordenada a coordenada
+\end{verbatim}
+
+Para productos matriciales (multiplicar ``matriz por vector'' o ``matriz por matriz'') se usa el operador \verb|@|:
+\begin{verbatim}
+A = np.array([[1, 2],
+              [3, 4]])
+x = np.array([5, 6])
+
+A @ x     # producto matriz-vector
+A @ A     # producto matriz-matriz
+\end{verbatim}
+
+Estos conceptos serán la base para todo el trabajo posterior con vectores, matrices y sistemas de ecuaciones.
+
+\centerline{\sc Primeras operaciones}
+\vspace{10pt}
+
+Las operaciones en Python siguen las reglas usuales de la aritmética, y lo único que hay que tener en cuenta es el código específico para ejecutarlas. A continuación daremos cuenta de los operadores más usuales (si \verb|x| e \verb|y| son números reales, o bien arrays de NumPy de la misma forma):
+
+\begin{center}
+\begin{tabular}{|p{0.3\textwidth}|p{0.6\textwidth}|}
+  \hline
+  \verb|x + y| & Suma de los números (o arrays) \verb|x| e \verb|y|. \\
+  \hline
+  \verb|x - y| & Resta de los números (o arrays) \verb|x| e \verb|y|. \\
+  \hline
+  \verb|x * y| & Producto de los números \verb|x| e \verb|y|. Si son arrays
+                 NumPy del mismo tamaño, producto coordenada a coordenada. \\
+  \hline
+  \verb|x / y| & Cociente de los números \verb|x| e \verb|y|. Si son arrays
+                 del mismo tamaño, cociente coordenada a coordenada. \\
+  \hline
+  \verb|x ** y| & Elevar \verb|x| a \verb|y|. Para arrays, potencia
+                  coordenada a coordenada. \\
+  \hline
+  \verb|x @ y| & Producto matricial de arrays bidimensionales (si las
+                 dimensiones lo permiten). \\
+  \hline
+  \verb|x.T| & Traspuesta del array bidimensional \verb|x|. \\
+  \hline
+\end{tabular}
+\end{center}
+
+Introduzcamos las siguientes operaciones en el intérprete de Python:
+\begin{itemize}
+  \item \verb|5 - 3**2*1/4 + 8|
+  \item \verb|(5 - 3)**((2*1)/(4+8))|
+\end{itemize}
+
+\paragraph{Mostrar resultados en pantalla.}
+Para ver el valor de una variable o de una expresión usamos la función \verb|print|:
+\begin{verbatim}
+x = 3.5
+print(x)                    # muestra 3.5
+
+y = x**2 + 1
+print("El valor de y es:", y)
+
+v = np.array([1, 2, 3])
+print("Vector v:", v)
+\end{verbatim}
+
+Cuando se imprime un array de NumPy, se muestran todos sus elementos. Si queremos cambiar cuántos decimales se muestran, podemos usar, por ejemplo,
+\verb|np.set_printoptions(precision=4)|, que hará que NumPy muestre sus arrays con cuatro decimales.
+
+También tenemos las constantes usuales: \verb|np.pi| (pi), \verb|np.e|, \dots
+\vspace{15pt}
+
+\centerline{\sc Vectores y Matrices}
+\vspace{15pt}
+
+Un vector es un conjunto de datos dispuestos uno detrás de otro a los que podemos acceder mediante un índice. Una matriz es un conjunto de datos dispuestos en un tablero a los que podemos acceder mediante dos índices, de tal forma que el primer índice indica la fila donde se encuentra el elemento y el segundo indica la columna.
+
+En Python, usando NumPy, definimos estos elementos de la siguiente forma: los datos se dispondrán entre corchetes \verb|[]|, y las filas de una matriz se indican mediante listas anidadas. Así, tenemos los siguientes ejemplos:
+\vspace{10pt}
+
+\begin{tabular}{l}
+\verb|M = np.array([[1, 2, -3*np.pi, 0],| \\
+\verb|                 [0, np.sqrt(2), -0.01, 4]])| \\
+representa la matriz $\left( \begin{array}{cccc}
+1 & 2 & -3\pi & 0 \\ 
+0 & \sqrt{2} & -0{,}01 & 4
+\end{array}\right)$ \\[6pt]
+\verb|v = np.array([1, 2, -3, np.pi, 0, np.sqrt(2), -0.01, 4])| \\
+representa el vector fila $\left( \begin{array}{cccccccc}
+1 & 2 & -3 & \pi & 0 & \sqrt{2} & -0{,}01 & 4
+\end{array}\right)$
+\end{tabular}
+\newpage
+
+{\bf Ejercicios.}
+\begin{enumerate}
+  \item Definir en Python (usando NumPy) las matrices y vectores
+  $$
+  A=\left(\begin{array}{cccc}
+  -1 & \sqrt{5} & 2 & \pi \\
+  0 & 3 & -1 & 4 \\
+  \pi & \sqrt[3]{5} & 0 & 1
+  \end{array} \right), \quad
+  B=\left(\begin{array}{ccc}
+  3 & \dfrac{2}{5} & 0 \\
+  0 & -1 & 4 \\
+  \pi & 0 & 1
+  \end{array} \right),
+  $$
+  $$
+  v=\left(\begin{array}{c}
+  4 \\
+  -3 \\
+  2
+  \end{array} \right), \quad
+  w=\left(\begin{array}{c}
+  \sqrt{7} \\
+  0 \\
+  2 \\
+  \pi
+  \end{array} \right).
+  $$
+  Por ejemplo:
+\begin{verbatim}
+A = np.array([[-1, np.sqrt(5), 2, np.pi],
+              [ 0, 3,         -1, 4],
+              [ np.pi, 5**(1/3), 0, 1]])
+
+B = np.array([[3, 2/5, 0],
+              [0, -1, 4],
+              [np.pi, 0, 1]])
+
+v = np.array([[4],
+              [-3],
+              [2]])
+
+w = np.array([[np.sqrt(7)],
+              [0],
+              [2],
+              [np.pi]])
+\end{verbatim}
+
+  \item Realizar todos los productos matriz--matriz y matriz--vector que las dimensiones admitan (usando el operador \verb|@| para producto matricial).
+\end{enumerate}
+\vspace{15pt}
+
+\centerline{\sc Sucesiones}
+\vspace{15pt}
+
+Una sucesión es una colección ordenada, finita o no, de números. Desde cierto punto de vista, no son más que casos particulares de vectores. A continuación veremos algunas formas rápidas de definir una sucesión de números, si sabemos qué patrón siguen. Usaremos funciones de NumPy:
+\begin{itemize}
+  \item \verb|np.arange(n, m+1)| creará un array cuyo primer elemento es \verb|n| y donde cada coordenada se calcula sumando una unidad a la coordenada anterior, hasta acabar en \verb|m| (es decir, creará la sucesión $n, n+1, n+2, \ldots, m$). Obviamente, \verb|n| tiene que ser menor que \verb|m|.
+  \item \verb|np.arange(n, m+q, q)| creará un array cuyo primer elemento es \verb|n|, y que va a paso \verb|q| (es decir, creará la sucesión $n, n+q, n+2q, \ldots$ hasta sobrepasar \verb|m|).
+  \item \verb|np.linspace(n, m, r)| creará un array cuyo primer elemento es \verb|n|, su último elemento es \verb|m| y que consta de \verb|r| elementos igualmente espaciados.
+\end{itemize}
+
+{\bf Ejercicio. }Consideramos la sucesión $2, \, 5, \, 8, \, 11,\, 14, \, 17, \, 20, \, 23, \, 26$. Definir esta sucesión de tres formas distintas y guardarlas bajo sendas variables \verb|v1|, \verb|v2| y \verb|v3|.
+\vspace{15pt}
+
+\centerline{\sc Funciones Matemáticas}
+\vspace{15pt}
+
+Python (con NumPy) incluye una serie de funciones matemáticas y trigonométricas que nos ayudan a simplificar algunos cálculos. A continuación mostramos algunas de ellas (supondremos que \verb|import numpy as np| ya se ha ejecutado).
+\vspace{10pt}
+
+\begin{tabular}{|p{0.35\textwidth}|p{0.55\textwidth}|}
+  \hline
+{\bf Función} & {\bf Descripción} \\
+\hline
+\verb|np.sqrt(x)| & Raíz cuadrada de \verb|x|.  \\
+\hline
+\verb|np.abs(x)| & Valor absoluto de \verb|x|.\\
+\hline
+\verb|np.log(x)| & Logaritmo neperiano de \verb|x|. \\
+\hline
+\verb|np.log2(x)| & Logaritmo en base 2 de \verb|x|. \\
+\hline
+\verb|np.log10(x)| & Logaritmo en base 10 de \verb|x|. \\
+\hline
+\verb|np.exp(x)| & Constante $e$ elevada a \verb|x|. \\
+\hline
+\verb|np.power(2, x)| & Para cada elemento de \verb|x|, calcula $2^x$. \\
+\hline
+\verb|np.remainder(x, y)| o \verb|x % y| & Resto entre la división de \verb|x| e \verb|y|. \\
+\hline
+\verb|np.round(x)| & Redondeo de \verb|x| al entero más cercano. \\
+\hline
+\verb|np.ceil(x)| & Redondeo al entero superior de \verb|x|. \\
+\hline
+\verb|np.floor(x)| & Redondeo al entero inferior de \verb|x|. \\
+\hline
+\verb|np.trunc(x)| & Redondeo hacia el entero más cercano a cero. \\
+\hline
+\verb|np.gcd(x, y)| & Máximo común divisor (elemento a elemento). \\
+\hline
+\verb|np.lcm(x, y)| & (En versiones recientes) m.c.m. elemento a elemento. \\
+\hline
+\verb|np.sin(x)|, \verb|np.cos(x)|, \verb|np.tan(x)| & Funciones trigonométricas ordinarias (en radianes). \\
+\hline
+\verb|np.arcsin(x)|, \verb|np.arccos(x)|, \verb|np.arctan(x)| & Funciones trigonométricas inversas. \\
+\hline
+\verb|np.sign(x)| & Devuelve $1$ para elementos positivos, $0$ para $0$ y $-1$ para negativos. \\
+\hline
+\verb|v[n]| & Elemento con índice \verb|n| del vector \verb|v| (primer índice: 0). \\
+\hline
+\verb|A[n, m]| & Elemento que se encuentra en la fila \verb|n| y columna \verb|m|. \\
+\hline
+\verb|v[n:m]| & Elementos desde el índice \verb|n| hasta el \verb|m-1|. \\
+\hline
+\verb|A[n, :]| & Todos los elementos de la fila \verb|n|. \\
+\hline
+\verb|A[:, m]| & Todos los elementos de la columna \verb|m|. \\
+\hline
+\verb|A[np.ix_(filas, columnas)]| & Submatriz cuyas filas y columnas se indican mediante \\
+                                  & los vectores de índices \verb|filas| y \verb|columnas|. \\
+\hline
+\verb|x.shape[0]| & Número de filas del array bidimensional \verb|x|. \\
+\hline
+\verb|x.shape[1]| & Número de columnas del array bidimensional \verb|x|. \\
+\hline
+\verb|len(v)| & Longitud del vector \verb|v|. \\
+\hline
+\verb|x.shape| & Tupla con (número de filas, número de columnas). \\
+\hline
+\verb|np.eye(n, m)| & Matriz $n \times m$ con diagonal $1$ y resto 0. \\
+                    & Si se invoca sólo con \verb|n|, matriz identidad $n\times n$. \\
+\hline
+\end{tabular}
+
+\vspace{10pt}
+
+\begin{tabular}{|p{0.35\textwidth}|p{0.55\textwidth}|}
+\hline
+\verb|np.diag(x, k)| & Si \verb|x| es un vector, crea una matriz cuya diagonal son los \\
+                     & elementos de \verb|x| empezando en la columna \verb|k|. \\
+                     & Si \verb|x| es una matriz, devuelve un vector con la diagonal \\
+                     & que empieza en el desplazamiento \verb|k|. \\
+\hline
+\verb|np.zeros((n, m))| & Crea una matriz $n\times m$ con sus elementos iguales a 0. \\
+\hline
+\verb|np.ones((n, m))| & Crea una matriz $n\times m$ con sus elementos iguales a 1. \\
+\hline
+\verb|np.linspace(p, q, n)| & Vector de \verb|n| elementos espaciados uniformemente \\
+                            & desde \verb|p| hasta \verb|q|. \\
+\hline
+\verb|np.linalg.matrix_rank(A)| & Rango de la matriz \verb|A|. \\
+\hline
+\verb|np.linalg.inv(A)| & Inversa de la matriz cuadrada \verb|A|. \\
+\hline
+\verb|np.linalg.det(A)| & Determinante de la matriz cuadrada \verb|A|. \\
+\hline
+\verb|np.trace(A)| & Suma de los elementos de la diagonal principal de \verb|A|. \\
+\hline
+\verb|np.sum(x)| & Suma de los elementos de \verb|x| (o por columnas con \verb|axis=0|). \\
+\hline
+\verb|np.prod(x)| & Producto de los elementos de \verb|x|. \\
+\hline
+\verb|np.max(x)| & Máximo de los elementos de \verb|x|. \\
+\hline
+\verb|np.min(x)| & Mínimo de los elementos de \verb|x|. \\
+\hline
+\verb|np.sort(x)| & Ordena de menor a mayor los elementos de \verb|x|. \\
+\hline
+\end{tabular}
+\vspace{25pt}
+
+{\bf Ejercicios.}
+\begin{enumerate}
+  \item Resolver el sistema, planteándolo de forma matricial y usando NumPy.
+  $$
+  \begin{aligned}
+   3x+2y\hspace{45pt}  &=0 \\
+   2x \hspace{25pt} -2z+t &=1 \\
+   \hspace{25pt} y+4z-3t &=-2 \\
+   x+5y-z-3t &=4
+  \end{aligned}
+  $$
+  (Pista: escribir el sistema como $A\mathbf{x} = \mathbf{b}$ y usar \verb|np.linalg.solve(A, b)|.)
+
+  \item Dados los vectores
+  $$
+  x=\left(\begin{array}{c}1 \\2\\-3\\5\end{array}\right), \quad
+  y=\left(\begin{array}{c}4 \\-4\\1\\2\end{array}\right), \quad
+  z=\left(\begin{array}{c}3 \\1\\2\\-4\end{array}\right),
+  $$
+  formar, usando NumPy, una matriz cuyas dos primeras columnas sean todo ceros, sus siguientes tres columnas sean los vectores $x, \, y$ y $z$ y sus últimas columnas sean todo unos.
+
+  \item En la matriz del apartado anterior, acceder a la submatriz formada por las filas 1, 3 y 4 y las columnas 1, 2 y 6 (teniendo en cuenta el índice 0 de Python). Calcular:
+  \begin{itemize}
+    \item el tamaño de esa submatriz (número de filas y columnas),
+    \item la suma de todos sus elementos.
+  \end{itemize}
+\end{enumerate}
+
+\centerline{\sc Funciones definidas por el usuario}
+\vspace{15pt}
+
+En Python podemos crear nuestras propias funciones, ya sea escribiéndolas directamente
+en el intérprete interactivo o, preferiblemente, en un archivo \verb|.py|. Es recomendable crearlas en un archivo de texto y guardarlo, para poder reutilizar el código.
+
+En Python la \textbf{identación} (tabulador o espacios al principio de la línea) es \emph{fundamental}: indica qué instrucciones pertenecen al cuerpo de la función. Todas las líneas del cuerpo deben estar indentadas de la misma forma. La instrucción \verb|return| indica qué valor (o valores) devuelve la función y, además, marca el final de la ejecución de la función.
+
+Las funciones que creamos en Python deben cumplir con el siguiente formato:
+\begin{verbatim}
+def nombre_funcion(argumentos_entrada):
+    # cuerpo de la función (obligatorio indentar)
+    variable_salida = ...
+    return variable_salida
+\end{verbatim}
+
+En caso de devolver varias variables, éstas pueden devolverse como una tupla separada por comas:
+\begin{verbatim}
+def nombre_funcion(argumentos_entrada):
+    salida1 = ...
+    salida2 = ...
+    return salida1, salida2
+\end{verbatim}
+
+Por ejemplo, crearemos una función que calcula el seno(x) en grados:
+\begin{verbatim}
+import numpy as np
+
+def sind(x):
+    """SIND(x) Calcula seno(x) en grados."""
+    s = np.sin(x * np.pi / 180)
+    return s
+\end{verbatim}
+
+Y ejecutamos, por ejemplo en el intérprete:
+\begin{verbatim}
+>>> sind(45)
+0.7071067811865475
+>>> sind(90)
+1.0
+\end{verbatim}
+
+Para que Python ejecute un archivo es suficiente con que éste tenga extensión \verb|.py|
+y se encuentre en el directorio desde donde lo ejecutamos, por ejemplo:
+\begin{verbatim}
+python mi_programa.py
+\end{verbatim}
+
+{\bf Ejercicios.}
+\begin{enumerate}
+  \item Crear una función (en un archivo \verb|.py|) cuyos parámetros de entrada sean una matriz invertible \verb|A| y un vector \verb|b|, y que devuelva la solución del sistema $Ax = b$ usando \verb|np.linalg.solve|.
+
+  \item Crear una función cuyos parámetros de entrada sean una matriz, un vector con tantas coordenadas como filas de la matriz y un número no mayor que el número de columnas de la matriz, y que devuelva la matriz sustituyendo la columna indicada por el número por el vector (utilizando indexado y asignación en NumPy).
+
+  \item Crear una función cuyos parámetros sean una matriz y que devuelva dos valores: la suma de todos sus elementos y la suma de los elementos de la diagonal principal (traza).
+
+  \item Crear una función que reciba como entrada un array de NumPy y devuelva dos valores: la suma de sus elementos y el valor medio (media aritmética). Probarla con un vector de 5 números.
+
+  \item Crear una función que reciba como entrada un array bidimensional \verb|A| y un número \verb|k| y devuelva la suma de los elementos de la fila \verb|k| y la suma de los elementos de la columna \verb|k|. Probarla con una matriz $3\times 3$ sencilla.
+\end{enumerate}
+
+\end{document}
+
