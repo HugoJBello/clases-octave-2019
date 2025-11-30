@@ -1,0 +1,113 @@
+\documentclass[a4paper,spanish,12pt]{article}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage[utf8]{inputenc}
+\usepackage{babel}
+
+\title{Soluciones a los ejercicios de\\
+Condicionales y bucles en Python (con NumPy)}
+\author{}
+\date{}
+
+\begin{document}
+\maketitle
+
+\section*{Ejercicio: Método de Jacobi}
+
+Queremos adaptar el código dado para el método de Jacobi a una función de Python cuya cabecera sea
+\begin{verbatim}
+import numpy as np
+
+def jacobi(N, A, b, x, d):
+\end{verbatim}
+donde:
+\begin{itemize}
+  \item \texttt{N} es el número máximo de iteraciones.
+  \item \texttt{A} es la matriz del sistema (array 2D de NumPy).
+  \item \texttt{b} es el vector de términos independientes (array 1D de NumPy).
+  \item \texttt{x} es el valor inicial (array 1D de NumPy).
+  \item \texttt{d} es el parámetro de control de la tolerancia.
+\end{itemize}
+
+La idea es:
+\begin{enumerate}
+  \item Repetir el proceso de Jacobi como máximo \texttt{N} veces.
+  \item En cada iteración, calcular una nueva aproximación \texttt{x\_nueva} usando la fórmula
+  \[
+  x_n(i)=\frac{1}{a_{ii}}\left(-\sum_{\substack{j=1 \\ j \neq i}}^n a_{ij}x_{n-1}(j)+b_i\right).
+  \]
+  \item Calcular la norma de la diferencia entre \texttt{x\_nueva} y \texttt{x}:
+  \[
+  \|x_{n}-x_{n-1}\| = \|x\_\text{nueva}-x\| = \texttt{np.linalg.norm(x\_nueva - x)}.
+  \]
+  \item Si esta norma es menor que \texttt{d}, consideramos que hemos alcanzado una aproximación suficiente y usamos \texttt{break} para salir del bucle.
+  \item Actualizar \texttt{x} con la nueva aproximación y seguir iterando mientras no se haya alcanzado la tolerancia y no se superen las \texttt{N} iteraciones.
+\end{enumerate}
+
+Una posible implementación completa es:
+
+\begin{verbatim}
+import numpy as np
+
+def jacobi(N, A, b, x, d):
+    """
+    Método de Jacobi para resolver A x = b.
+
+    Parámetros
+    ----------
+    N : int
+        Número máximo de iteraciones.
+    A : np.ndarray
+        Matriz del sistema (n x n).
+    b : np.ndarray
+        Vector de términos independientes (n,).
+    x : np.ndarray
+        Aproximación inicial (n,).
+    d : float
+        Tolerancia para la norma de x_n - x_{n-1}.
+
+    Devuelve
+    --------
+    x : np.ndarray
+        Aproximación final a la solución.
+    k : int
+        Número de iteraciones realizadas.
+    """
+
+    n = x.shape[0]
+
+    for k in range(N):
+        # Guardamos la aproximación anterior
+        x_anterior = x.copy()
+
+        # Nueva aproximación x_n
+        x_nueva = np.zeros_like(x)
+
+        for i in range(n):
+            cuant = 0.0
+            for j in range(n):
+                cuant = cuant + A[i, j] * x_anterior[j]
+
+            x_nueva[i] = (-cuant + A[i, i] * x_anterior[i] + b[i]) / A[i, i]
+
+        # Comprobamos la norma de la diferencia
+        diferencia = np.linalg.norm(x_nueva - x_anterior)
+
+        # Actualizamos x
+        x = x_nueva
+
+        # Criterio de parada
+        if diferencia < d:
+            break
+
+    return x, k + 1
+\end{verbatim}
+
+Obsérvese que:
+\begin{itemize}
+  \item Se usa \texttt{np.zeros\_like(x)} para crear un vector de ceros con el mismo tamaño que \texttt{x}.
+  \item La expresión \texttt{np.linalg.norm(x\_nueva - x\_anterior)} calcula la norma euclídea de la diferencia.
+  \item La identación (sangrado) de los bloques \texttt{for}, \texttt{if}, etc., es esencial para que el programa funcione correctamente.
+\end{itemize}
+
+\end{document}
+

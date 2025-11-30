@@ -1,0 +1,387 @@
+\documentclass[a4paper,spanish,12pt]{article}
+\usepackage{graphicx,amscd,color,amsmath,amsfonts,amssymb,amsthm}
+\usepackage{babel, graphicx}
+\usepackage[utf8]{inputenc}
+\usepackage{eurosym}
+
+%%% retoques a dimensiones
+\setlength{\topmargin}{-1cm}
+\addtolength{\evensidemargin}{-2cm}
+\addtolength{\oddsidemargin}{-2cm}
+\addtolength{\textwidth}{3.5cm}
+
+%%%%%% conjuntos de numeros %%%%%%%%
+\newcommand{\R}{{\mathbb R}}
+\newcommand{\ds}{{\displaystyle}}
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%% primera convocatoria %%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\pagestyle{empty}
+
+\centerline{\Large\textsc{Condicionales y bucles en Python (con NumPy)}}\vspace{25pt}
+
+\centerline{\textsc{Uso de NumPy}}
+\vspace{15pt}
+
+En este tutorial vamos a usar \textbf{NumPy} para todas las operaciones matemáticas y para trabajar con vectores y matrices. 
+\begin{itemize}
+  \item NumPy es una librería de Python para cálculo numérico eficiente.
+  \item Siempre que usemos vectores o matrices, los representaremos como \textbf{arrays de NumPy}, no como listas de Python.
+  \item Para usar NumPy, al principio de cada programa hay que escribir:
+\begin{verbatim}
+import numpy as np
+\end{verbatim}
+\end{itemize}
+
+En los ejemplos que siguen supondremos que esa línea aparece al comienzo de nuestros ficheros de Python.
+
+\vspace{15pt}
+\centerline{\textsc{Instrucción \texttt{if}}}
+\vspace{15pt}
+
+La instrucción \texttt{if} nos permite preguntar una condición respecto a los cálculos que estamos manejando y obrar en consecuencia en función de si dicha condición se cumple o no. La forma básica de esta instrucción en Python es la siguiente:
+\begin{verbatim}
+if condicion:
+    instrucciones
+\end{verbatim}
+
+Si la condición se cumple (es decir, si es \texttt{True}), entonces las instrucciones se ejecutarán. Si no se cumple (es \texttt{False}), las instrucciones se ignorarán.
+
+\medskip
+\noindent\textbf{Muy importante sobre la identación en Python.} A diferencia de lenguajes como Octave o C, en Python \emph{no} se usan palabras como \texttt{end} para marcar el final de un bloque. En su lugar:
+\begin{itemize}
+  \item El carácter \texttt{:} al final de la línea (por ejemplo en \texttt{if condicion:}) indica el comienzo de un bloque.
+  \item \emph{Todas} las líneas que pertenecen a ese bloque tienen que ir \emph{indentadas} (con espacios en blanco al principio de la línea) con la misma profundidad.
+  \item Cuando la identación vuelve hacia atrás (disminuye), el bloque termina.
+\end{itemize}
+Es decir, \textbf{la identación (los espacios al principio de la línea) es la manera en que Python sabe dónde empieza y termina un bloque de código}. Si la identación es incorrecta, el programa dará un error de sintaxis o se comportará de forma inesperada.
+
+\medskip
+
+Veamos un ejemplo sencillo de cómo implementaríamos la función del valor absoluto $|x|$ si ésta no apareciera implementada en Python (aunque en realidad ya existe la función \texttt{abs}):
+
+\begin{verbatim}
+import numpy as np
+
+def valor_absoluto(x):
+    if x < 0:
+        y = -x
+    if x >= 0:
+        y = x
+    return y
+\end{verbatim}
+
+\noindent
+Los operadores de comparación más usados con estas instrucciones son los que se muestran a continuación:
+\begin{center}
+\[
+\begin{array}{|c|c|}
+\hline
+\text{Operador} & \text{Interpretación} \\
+\hline
+<   & \text{menor que} \\
+<=  & \text{menor que o igual a} \\
+>   & \text{mayor que} \\
+>=  & \text{mayor que o igual a} \\
+==  & \text{igual a} \\
+!=  & \text{distinto de} \\
+\hline
+\end{array}
+\]
+\end{center}
+
+En Python se pueden agrupar varias condiciones para una misma instrucción \verb|if| y hacer que la instrucción se ejecute cuando se cumplan todas, o se cumpla alguna. En tal caso, habrá que poner cada condición entre paréntesis y separarlas por el operador lógico correspondiente. Los conectores lógicos que usa Python aparecen en la siguiente tabla:
+\begin{center}
+\[
+\begin{array}{|c|c|}
+\hline
+\text{Símbolo} & \text{Operador lógico en Python} \\
+\hline
+\texttt{not} & \text{no} \\
+\texttt{and} & \text{y} \\
+\texttt{or}  & \text{o} \\
+\hline
+\end{array}
+\]
+\end{center}
+
+Pongamos por ejemplo que queremos calcular las raíces de una parábola y que queremos que el cálculo se produzca solamente cuando tengamos la certeza de que las raíces existen y son reales. Como sabemos que las raíces de la parábola $ax^2+bx+c$ vienen dadas por
+\[
+x= \frac{-b \pm \sqrt{b^2-4ac}}{2a},
+\]
+podemos programar el código en Python (usando NumPy) como sigue:
+\begin{verbatim}
+import numpy as np
+
+if (b**2 - 4*a*c >= 0) and (a != 0):
+    x1 = (-b + np.sqrt(b**2 - 4*a*c)) / (2*a)
+    x2 = (-b - np.sqrt(b**2 - 4*a*c)) / (2*a)
+\end{verbatim}
+
+De nuevo, fíjate en que todas las instrucciones que pertenecen al bloque del \texttt{if} (los cálculos de \texttt{x1} y \texttt{x2}) están indentadas con los mismos espacios.
+
+\vspace{15pt}
+\centerline{\textsc{Instrucciones \texttt{if} anidadas}}
+\vspace{15pt}
+
+El comando \verb|else| nos permitirá introducir una instrucción en el caso de que la condición dada por el comando \verb|if| correspondiente no se cumpla. Así, por ejemplo, la función para el valor absoluto podría implementarse de la siguiente forma en Python:
+
+\begin{verbatim}
+import numpy as np
+
+def valor_absoluto(x):
+    if x < 0:
+        y = -x
+    else:
+        y = x
+    return y
+\end{verbatim}
+
+Este procedimiento funciona si sólo tenemos que considerar dos situaciones: que una condición se cumpla o que no. En caso de que haya más de dos condiciones que determinen qué instrucciones ejecutar, deberemos usar el comando \verb|elif| (abreviatura de ``else if''). El siguiente método computa todas las soluciones reales posibles de una ecuación de segundo grado $ax^2+bx+c=0$:
+
+\begin{verbatim}
+import numpy as np
+
+def ecuacion_cuadratica(a, b, c):
+    if a != 0:
+        # Ecuación de segundo grado
+        if b**2 - 4*a*c >= 0:
+            x1 = (-b + np.sqrt(b**2 - 4*a*c)) / (2*a)
+            x2 = (-b - np.sqrt(b**2 - 4*a*c)) / (2*a)
+            print("La ecuación tiene dos soluciones reales, que son")
+            print(x1)
+            print("y")
+            print(x2)
+        else:
+            print("La ecuación no tiene soluciones reales.")
+    elif b != 0:
+        # Ecuación lineal: b x + c = 0
+        print("La ecuación es una ecuación lineal con solución")
+        print(-c / b)
+    elif c != 0:
+        print("La ecuación es una identidad falsa que, por lo tanto, no tiene solución.")
+    else:
+        print("La ecuación es una identidad verdadera y, por lo tanto, cualquier número es solución.")
+\end{verbatim}
+
+Observa de nuevo cómo los bloques se estructuran únicamente mediante la identación: las líneas dentro de cada \verb|if|, \verb|elif| o \verb|else| están todas igualmente indentadas.
+
+\vspace{15pt}
+\centerline{\textsc{Bucles}}
+\vspace{15pt}
+
+Un bucle es una estructura de programación que permite la repetición controlada de un conjunto de instrucciones. Los bucles que veremos a continuación son los más utilizados, no sólo en Python, sino en la inmensa mayor parte de los lenguajes de programación.
+
+\begin{itemize}
+\item \textbf{Bucle \texttt{for}.}
+
+Este bucle ejecuta una determinada instrucción tantas veces como se lo indique el usuario. Su estructura en Python es la siguiente:
+\begin{verbatim}
+for indice in iterable:
+    instrucciones
+\end{verbatim}
+
+El objeto \texttt{iterable} suele ser una lista, una tupla, un rango de números, etc. En este curso, cuando trabajemos con colecciones numéricas, usaremos \textbf{arrays de NumPy}. El índice (por ejemplo, \texttt{indice}) irá tomando, en orden, los valores del iterable, y para cada uno de ellos se ejecutarán las instrucciones indicadas por el usuario.
+
+En particular, no hace falta que se llame \texttt{i}: cualquier otro nombre funcionará igual.
+
+Un caso muy importante es el uso de la función \texttt{range}, que genera secuencias de enteros. Por ejemplo, \verb|range(1, 11)| genera los enteros del 1 al 10 (el extremo superior no se incluye).
+
+Si queremos realizar un código que construya el vector
+\[
+v=\left(1,\frac{1}{2},\frac{1}{3},\ldots,\frac{1}{10}\right),
+\]
+operaríamos de la siguiente manera (usando un array de NumPy):
+
+\begin{verbatim}
+import numpy as np
+
+v = np.zeros(10)             # Creamos un vector de 10 ceros
+
+for i in range(10):          # i toma los valores 0, 1, ..., 9
+    v[i] = 1 / (i + 1)
+\end{verbatim}
+
+Así, el vector \texttt{v} se iría creando en cada iteración del bucle \verb|for|.
+
+Hagamos otro programa, que proporcione la suma de los elementos de un vector de NumPy (lo cual ya podemos hacer con la función \verb|np.sum|, pero lo implementamos a mano):
+
+\begin{verbatim}
+import numpy as np
+
+def mi_sum(v):
+    x = 0
+    for i in range(v.shape[0]):
+        x = x + v[i]
+    return x
+\end{verbatim}
+
+Notemos que hemos tenido que iniciar la suma con \verb|x = 0| para poder tener la variable creada, o el programa daría problemas. Esta técnica es muy socorrida para casos donde tengamos que realizar sumas o productos con elementos cuyo límite no podemos controlar (vectores de cualquier longitud, matrices de cualquier dimensión...).
+
+Como segundo ejemplo, y nuevamente aunque Python ya tiene una función para ello, vamos a implementar una función que nos calcule el factorial de un número:
+
+\begin{verbatim}
+import numpy as np
+
+def factorial(n):
+    # Comprobamos que n es un entero no negativo
+    if (int(n) != n) or (n != abs(n)):
+        print("Necesito un entero no negativo.")
+        return None
+    n = int(n)
+
+    if n == 0:
+        x = 1
+    else:
+        x = 1
+        for i in range(1, n + 1):
+            x = x * i
+    return x
+\end{verbatim}
+
+Obsérvese de nuevo que los bloques de código se delimitan por identación: las instrucciones dentro del \texttt{if}, \texttt{elif} o \texttt{for} están indentadas respecto a la cabecera.
+
+Veamos otro programa que tome una matriz cuadrada y lo que haga sea reflejar la triangular superior sobre la inferior, es decir, cree una matriz simétrica a partir de los elementos de la triangular superior. Usaremos arrays de NumPy para representar matrices:
+
+\begin{verbatim}
+import numpy as np
+
+def triang_sim(A):
+    # A es una matriz (array 2D de NumPy)
+    n, m = A.shape
+
+    if n != m:
+        print("La matriz introducida no es cuadrada.")
+        return None
+    else:
+        # Copiamos A en B para no modificar la original
+        B = A.copy()
+
+        for i in range(1, n):
+            for j in range(i):
+                B[i, j] = A[j, i]
+
+        return B
+\end{verbatim}
+
+Por último, hagamos un programa que calcule el término $n$-ésimo de la sucesión de Fibonacci (que, como todo el mundo sabe, es una sucesión que se inicia con $0$ y $1$ y después calcula el siguiente término mediante la suma de los dos anteriores: $0,1,1,2,3,5,8,13,\ldots$). Aquí no necesitamos NumPy, pero mantenemos la misma sintaxis de bloques:
+
+\begin{verbatim}
+def fib(n):
+    # Comprobamos que n es un entero positivo
+    if (int(n) != n) or (n != abs(n)):
+        print("Necesito que el número sea un entero positivo.")
+        return None
+    n = int(n)
+
+    if n == 1:
+        x = 0
+    elif n == 2:
+        x = 1
+    else:
+        x1 = 0
+        x2 = 1
+        for i in range(3, n + 1):
+            x = x1 + x2
+            x1 = x2
+            x2 = x
+    return x
+\end{verbatim}
+
+\item \textbf{Bucle \texttt{while}.}
+
+Los bucles \verb|while| ejecutan unas instrucciones mientras que determinada condición lógica se verifica. La sintaxis es como sigue:
+\begin{verbatim}
+while condicion:
+    instrucciones
+\end{verbatim}
+
+De nuevo, la importancia de la identación es crucial: todas las instrucciones que se repiten mientras la condición sea verdadera van indentadas bajo la línea del \verb|while|.
+
+El riesgo que pueden tener estos bucles es que la condición no deje de verificarse, y el programa se vea atrapado en un bucle infinito, en cuyo caso deberemos usar la instrucción \verb|break| para salir de éste o, en su defecto, detener el programa.
+
+Nótese que un bucle \verb|for| puede transformarse en un bucle \verb|while|. Pongamos el ejemplo de la suma de las coordenadas de un vector de NumPy. Si queremos usar un bucle \verb|while| podríamos escribir:
+
+\begin{verbatim}
+import numpy as np
+
+def mi_sum_while(v):
+    x = 0
+    i = 0
+    n = v.shape[0]
+
+    while i < n:
+        x = x + v[i]
+        i = i + 1
+
+    return x
+\end{verbatim}
+
+\end{itemize}
+
+\vspace{15pt}
+\centerline{\textsc{Método de Jacobi para aproximación de soluciones de ecuaciones lineales}}
+\vspace{15pt}
+
+Con lo visto anteriormente tenemos las herramientas para hacer programas complicados, entre los que se encuentran los métodos iterativos, es decir, algoritmos que consisten en la repetición de un mismo proceso varias veces, de tal forma que se construye una sucesión. Nos vamos a detener en el llamado método de Jacobi, el cual permite encontrar soluciones de sistemas del tipo $Ax=b$ (recordemos que el cálculo de $A^{-1} b$ puede empezar a dar problemas al poco que la matriz sea complicada). El método es el que sigue:
+
+\begin{enumerate}
+\item Empezamos con un valor cualquiera $x_0$ (vector de NumPy).
+\item $x_n$ lo obtenemos del término anterior, $x_{n-1}$, de la siguiente forma: la coordenada $i$-ésima la obtenemos a partir de la fórmula
+\[
+x_n(i)=\frac{1}{a_{ii}}\left(-\sum_{\substack{j=1 \\ j \neq i}}^n a_{ij}x_{n-1}(j)+b_i\right), \quad i=1, \ldots,n.
+\]
+\end{enumerate}
+
+Si consideramos ese método, la sucesión $\{x_n\}$ creada verifica que tiende a la solución del sistema $Ax=b$ (bajo ciertas condiciones sobre la matriz $A$). En particular, se verifica que la distancia entre dos elementos consecutivos tiende a cero:
+\[
+\lim_{n \rightarrow \infty}\|x_{n}-x_{n+1} \|=0.
+\]
+
+Así, si queremos implementar el método con $100000$ iteraciones, podríamos escribir el siguiente código (suponiendo que $A$ es un array 2D de NumPy, y $x$ y $b$ son arrays 1D de NumPy):
+
+\begin{verbatim}
+import numpy as np
+
+# Suponemos que A, b y x están definidos, y que A es cuadrada.
+
+for k in range(100000):
+    y = x.copy()                # Copia de la aproximación anterior
+    n = x.shape[0]
+
+    for i in range(n):
+        cuant = 0
+        for j in range(n):
+            cuant = cuant + A[i, j] * y[j]
+
+        x[i] = (-cuant + A[i, i] * y[i] + b[i]) / A[i, i]
+\end{verbatim}
+
+De nuevo, fíjate en la estructura de identación: el bloque del bucle externo \verb|for k in range(100000):| lleva indentado todo el código que se repite en cada iteración, y dentro de él, el bloque del bucle interior \verb|for i in range(n):| va indentado un nivel más.
+
+\medskip
+\noindent{\bf Ejercicio.} \\
+Adaptar el código anterior para un programa cuyas variables sean el número de iteraciones $N$, la matriz del sistema $A$, el vector de términos independientes $b$ y el valor inicial $x$ (todos ellos arrays de NumPy). Incluir además un parámetro de control $d$, de forma que si $\|x_{n}-x_{n-1} \|<d$ entonces el programa interrumpa el proceso (porque consideraremos que estamos lo suficientemente cerca de la solución).
+
+Es decir, el programa debería tener como cabecera algo parecido a
+\begin{verbatim}
+import numpy as np
+
+def jacobi(N, A, b, x, d):
+\end{verbatim}
+y en su interior, dentro de un bucle, ir actualizando la aproximación \texttt{x}. En cada paso se deberá calcular la norma de la diferencia entre la nueva aproximación y la anterior usando, por ejemplo, la norma euclídea que proporciona NumPy:
+\[
+\|x_{n}-x_{n-1}\| = \sqrt{\sum_{i=1}^n (x_n(i) - x_{n-1}(i))^2}
+\]
+lo cual en Python con NumPy se puede escribir como
+\begin{verbatim}
+np.linalg.norm(x_n - x_anterior)
+\end{verbatim}
+y, si es menor que \texttt{d}, salir del bucle usando la instrucción \verb|break|. Recuerda usar la identación correctamente en todos los bloques (\verb|for|, \verb|if|, \verb|while|, etc.) para que el programa funcione.
+
+\end{document}
+
